@@ -55,6 +55,12 @@ public class QuickUnion {
 		
 	}//end of method
 	
+	
+	public boolean connected(int p, int q)
+	{
+		return findRoot(p)== findRoot(q);
+	}//end of method
+	
 	public void print()
 	{
 		System.out.println( Arrays.toString(master)   );
