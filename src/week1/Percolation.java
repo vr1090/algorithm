@@ -2,13 +2,13 @@ package week1;
 
 import java.util.Arrays;
 
-public class QuickUnion {
+public class Percolation {
 	
 	private int[] master = null;
 	private int[] size = null;
 	int panjang=0;
 	
-	public QuickUnion(int N)
+	public Percolation(int N)
 	{
 		master = new int[N];
 		size = new int[N];
@@ -69,7 +69,7 @@ public class QuickUnion {
 	
 	public static void main(String[] args)
 	{
-		QuickUnion up = new QuickUnion(10);
+		Percolation up = new Percolation(10);
 		
 		up.union(0,9);
 		up.union(7,2);

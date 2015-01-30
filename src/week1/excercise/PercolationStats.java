@@ -23,13 +23,9 @@ public class PercolationStats {
 		for( int i=0; i < count_montecarlo; i++)
 		{
 			
-			QuickUnion quick = new QuickUnion(N*N+2);
+			Percolation quick = new Percolation(N*N+2);
 			PercolationStructure struct = new PercolationStructure(N, quick);
 			int attempt =0;
-			
-			
-			
-			
 			
 			while( !struct.isDone() )
 			{
@@ -95,9 +91,9 @@ public class PercolationStats {
 		private int rootAtas =0;
 		private int rootBawah=-1;
 		
-		private QuickUnion guardian= null;
+		private Percolation guardian= null;
 		
-		public PercolationStructure(int n, QuickUnion nf)
+		public PercolationStructure(int n, Percolation nf)
 		{
 			
 			blocks = new Block[n+1][n+1];
