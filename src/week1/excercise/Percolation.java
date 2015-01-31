@@ -56,7 +56,7 @@ public class Percolation {
 			//System.out.println("finish");
 	   }//end of method
 	   
-	   public boolean open1(int x, int y)
+	   private boolean open1(int x, int y)
 	   {
 		   //System.out.println("open "+ x +" "+y);
 		   Block b = blocks[x][y];

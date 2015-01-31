@@ -30,9 +30,9 @@ public class PercolationStats {
 				//System.out.println( "open ("+x + ","+y+")");
 				//quick.open(x,y);
 				//System.out.println(quick.percolates() );
-				
-				if( quick.open1(x, y) )
-					attempt++;
+				if( quick.isOpen(x, y))
+					continue;
+				attempt++;
 			}//end of while
 			
 			result.add( (double)attempt/(dimension*dimension) );
