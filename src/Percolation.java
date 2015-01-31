@@ -16,6 +16,9 @@ public class Percolation {
 	// create N-by-N grid, with all sites blocked
 	public Percolation(int n) {
 		// System.out.println("hei");
+		if( n<1)
+			throw new IllegalArgumentException();
+		
 		blocks = new Block[n + 1][n + 1];
 		guardian = new QuickUnionUF(n * n + 2);
 		int pos = 1;
@@ -53,18 +56,14 @@ public class Percolation {
 		// System.out.println("finish");
 	}// end of method
 
-	private boolean open1(int x, int y) {
-		// System.out.println("open "+ x +" "+y);
-		Block b = blocks[x][y];
-		if (b.isOpen)
-			return false;
-
-		open(x, y);
-		return true;
-	}// end of method
+	
 
 	// open site (row i, column j) if it is not open already
 	public void open(int x, int y) {
+		if( x < 1 || x > maxX || y < 1 || y > maxY)
+			throw new IndexOutOfBoundsException();
+		
+		
 		Block b = blocks[x][y];
 
 		if (b.isOpen)
