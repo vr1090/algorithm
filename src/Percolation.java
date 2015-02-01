@@ -37,27 +37,22 @@ public class Percolation {
 
 				blocks[row][col] = newBlock;
 				pos++;
-			}// end for
-		}// end for
+			} // end for
+		} // end for
 
-		// set the first row
-		// for( int i=1; i<=n;i++)
-		// {
-		// guardian.union(0, i);
-		// }//end of for
+		
 
 		int last = (n * n) + 1;
 
-		// for(int i=last-n; i<last;i++)
-		// guardian.union(last, i);
+		
 
 		// sing yang dibutuhken ...
 		maxX = n;
 		maxY = n;
 		rootBawah = last;
 
-		// System.out.println("finish");
-	}// end of method
+		
+	} // end of method
 
 	// open site (row i, column j) if it is not open already
 	public void open(int x, int y) {
@@ -83,8 +78,8 @@ public class Percolation {
 			if (bxkiri.isOpen) {
 				guardian.union(b.arrayPos, bxkiri.arrayPos);
 				guardianStrict.union(b.arrayPos, bxkiri.arrayPos);
-			}// end of if
-		}// end if
+			} // end of if
+		} // end if
 
 		// cek kanan
 		if (xKanan <= maxX) {
@@ -92,8 +87,8 @@ public class Percolation {
 			if (bTemp.isOpen) {
 				guardian.union(b.arrayPos, bTemp.arrayPos);
 				guardianStrict.union(b.arrayPos, bTemp.arrayPos);
-			}// end of if
-		}// end if
+			} // end of if
+		} // end if
 
 		// cek atas
 		if (yAtas >= minY) {
@@ -101,8 +96,8 @@ public class Percolation {
 			if (bTemp.isOpen) {
 				guardian.union(b.arrayPos, bTemp.arrayPos);
 				guardianStrict.union(b.arrayPos, bTemp.arrayPos);
-			}// end of if
-		}// end if
+			} // end of if
+		} // end if
 
 		// cek bawah
 		if (yBawah <= maxY) {
@@ -110,15 +105,15 @@ public class Percolation {
 			if (bTemp.isOpen) {
 				guardian.union(b.arrayPos, bTemp.arrayPos);
 				guardianStrict.union(b.arrayPos, bTemp.arrayPos);
-			}// end of if
-		}// end if
+			} // end of if
+		} // end if
 
 		if (x == minY)
 			guardian.union(rootAtas, b.arrayPos);
 
 		if (!this.percolates() && x == maxY)
 			guardian.union(rootBawah, b.arrayPos);
-	}// end of method
+	} // end of method
 
 	// is site (row i, column j) open?
 	public boolean isOpen(int x, int y) {
@@ -126,7 +121,7 @@ public class Percolation {
 			throw new IndexOutOfBoundsException();
 
 		return (blocks[x][y]).isOpen;
-	}
+	} //end of method
 
 	// is site (row i, column j) full?
 	public boolean isFull(int x, int y) {
@@ -144,23 +139,23 @@ public class Percolation {
 		for (int i = 1; i <= maxX; i++) {
 			Block b2 = blocks[1][i];
 			hasil = hasil || guardianStrict.connected(b.arrayPos, b2.arrayPos);
-		}// end for
+		} // end for
 
 		return hasil;
-	}
+	} //end of method
 
 	// does the system percolate?x
 	public boolean percolates() {
 
 		return guardian.connected(rootAtas, rootBawah);
-	}// end of method
+	} // end of method
 
 	private class Block {
 		int x = -1;
 		int y = -1;
 		boolean isOpen = false;
 		int arrayPos;
-	}// end of private class
+	} // end of private class
 
 	public static void main(String[] args) {
 		Percolation per = new Percolation(3);
@@ -174,7 +169,7 @@ public class Percolation {
 		System.out.println("is full .. " + per.isFull(3, 1));
 		// per.getUF().print();
 
-	}// end of method
+	} // end of method
 
 	private class UF {
 
@@ -191,17 +186,17 @@ public class Percolation {
 			for (int i = 0; i < N; i++) {
 				master[i] = i;
 				size[i] = 1;
-			}// end for
-		}// end of constructor
+			} // end for
+		} // end of constructor
 
 		private int findRoot(int node) {
 			while (node != master[node]) {
 				master[node]= master[master[node]];
 				node = master[node];
-			}// end while
+			} // end while
 
 			return node;
-		}// end of method
+		} // end of method
 
 		public void union(int p, int q) {
 			int rootP = findRoot(p);
@@ -210,23 +205,23 @@ public class Percolation {
 			if (size[rootP] < size[rootQ]) {
 				master[rootP] = rootQ;
 				size[rootQ] = size[rootQ] + size[rootP];
-			}// end if
+			} // end if
 			else {
 				master[rootQ] = rootP;
 				size[rootP] = size[rootQ] + size[rootP];
 
-			}// end else
+			} // end else
 
-		}// end of method
+		} // end of method
 
 		public boolean connected(int p, int q) {
 			return findRoot(p) == findRoot(q);
-		}// end of method
+		} // end of method
 
 		public void print() {
 			System.out.println(Arrays.toString(master));
-		}// end of method
+		} // end of method
 
-	}// end of class
+	} // end of class
 
-}// end of class
+} // end of class

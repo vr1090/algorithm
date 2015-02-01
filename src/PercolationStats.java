@@ -8,7 +8,8 @@ public class PercolationStats {
 	private List<Percolation> pers;
 	private double mean;
 	private double stdev;
-
+	private double[] resultArray;
+	
 	public PercolationStats(int N, int T) // perform T independent experiments
 											// on an N-by-N grid
 	{
@@ -24,9 +25,9 @@ public class PercolationStats {
 
 			Percolation quick = new Percolation(N);
 			pers.add(quick);
-		}// end for
+		} // end for
 
-	}// end of method
+	} // end of method
 	
 	private void performCalculation()
 	{
@@ -47,49 +48,45 @@ public class PercolationStats {
 					continue;
 				quick.open(x,y);
 				attempt++;
-			}// end of while
+			} // end of while
 
 			result.add((double) attempt / (dimension * dimension));
-
-		}//end for
-	}//end of method
+		} //end for
+		
+		resultArray = new double[result.size()];
+		
+		for(int i=0; i< result.size(); i++)
+		{
+			resultArray[i] = result.get(i);
+		} //end for
+		
+		
+	} //end of method
 	
 
 	public double mean() // sample mean of percolation threshold
 	{
 		performCalculation();
-		double tempValue = 0;
-
-		for (Double d : result) {
-			tempValue = tempValue + d;
-		}// end for
-		mean = tempValue / count_montecarlo;
+		mean = StdStats.mean(resultArray);
 		return mean;
-	}// end of method
+	} // end of method
 
 	public double stddev() // sample standard deviation of percolation threshold
 	{
 		performCalculation();
-		double tempValue = 0;
-
-		for (Double d : result) {
-			tempValue = tempValue + Math.pow((d - mean), 2);
-		}// end for
-
-		stdev = tempValue / (count_montecarlo - 1);
-
+		stdev = StdStats.stddev(resultArray);
 		return stdev;
-	}// end of method
+	} // end of method
 
 	public double confidenceLo() // low endpoint of 95% confidence interval
 	{
-		return mean - 1.96 * Math.sqrt(stdev) / Math.sqrt(count_montecarlo);
-	}// end of method
+		return mean - (1.96 * stdev ) /( Math.sqrt(count_montecarlo));
+	} // end of method
 
 	public double confidenceHi() // high endpoint of 95% confidence interval
 	{
-		return mean + 1.96 * Math.sqrt(stdev) / Math.sqrt(count_montecarlo);
-	}// end of method
+		return mean + (1.96 * stdev) / (Math.sqrt(count_montecarlo));
+	} // end of method
 
 	public static void main(String[] args) // test client (described below)
 	{
@@ -103,5 +100,5 @@ public class PercolationStats {
 		System.out.println(String.format("%-24s = %f, %f",
 				"95% confidence interval ", stats.confidenceLo(),
 				stats.confidenceHi()));
-	}// end of method
-}// end of class
+	} // end of method
+} // end of class
