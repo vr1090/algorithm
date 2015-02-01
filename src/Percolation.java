@@ -1,4 +1,5 @@
 
+import java.awt.Dimension;
 import java.util.Arrays;
 
 public class Percolation {
@@ -12,6 +13,7 @@ public class Percolation {
 	private int rootBawah = -1;
 
 	private QuickUnionUF guardian = null;
+	private QuickUnionUF guardianStrict = null;
 
 	// create N-by-N grid, with all sites blocked
 	public Percolation(int n) {
@@ -21,6 +23,8 @@ public class Percolation {
 		
 		blocks = new Block[n + 1][n + 1];
 		guardian = new QuickUnionUF(n * n + 2);
+		guardianStrict = new QuickUnionUF(n*n+2);
+		
 		int pos = 1;
 		// initialize dulu kali yah..
 		for (int row = 1; row <= n; row++) {
@@ -82,6 +86,7 @@ public class Percolation {
 			Block bxkiri = blocks[xKiri][y];
 			if (bxkiri.isOpen) {
 				guardian.union(b.arrayPos, bxkiri.arrayPos);
+				guardianStrict.union(b.arrayPos, bxkiri.arrayPos);
 			}// end of if
 		}// end if
 
@@ -90,6 +95,7 @@ public class Percolation {
 			Block bTemp = blocks[xKanan][y];
 			if (bTemp.isOpen) {
 				guardian.union(b.arrayPos, bTemp.arrayPos);
+				guardianStrict.union(b.arrayPos, bTemp.arrayPos);
 			}// end of if
 		}// end if
 
@@ -98,6 +104,7 @@ public class Percolation {
 			Block bTemp = blocks[x][yAtas];
 			if (bTemp.isOpen) {
 				guardian.union(b.arrayPos, bTemp.arrayPos);
+				guardianStrict.union(b.arrayPos, bTemp.arrayPos);
 			}// end of if
 		}// end if
 
@@ -106,6 +113,7 @@ public class Percolation {
 			Block bTemp = blocks[x][yBawah];
 			if (bTemp.isOpen) {
 				guardian.union(b.arrayPos, bTemp.arrayPos);
+				guardianStrict.union(b.arrayPos, bTemp.arrayPos);
 			}// end of if
 		}// end if
 
@@ -117,19 +125,33 @@ public class Percolation {
 	}// end of method
 
 	// is site (row i, column j) open?
-	public boolean isOpen(int i, int j) {
-		return (blocks[i][j]).isOpen;
+	public boolean isOpen(int x, int y) {
+		if( x < minX || x > maxX || y < minY || y > maxY)
+			throw new IndexOutOfBoundsException();
+		
+		return (blocks[x][y]).isOpen;
 	}
 
 	// is site (row i, column j) full?
-	public boolean isFull(int i, int j) {
-		Block b = blocks[i][j];
+	public boolean isFull(int x, int y) {
+		if( x < minX || x > maxX || y < minY || y > maxY)
+			throw new IndexOutOfBoundsException();
+		
+		Block b = blocks[x][y];
 
 		if (!b.isOpen)
 			return false;
 		//System.out.println(i + "," + j + "," + b.arrayPos);
 		//guardian.print();
-		return guardian.connected(rootAtas, b.arrayPos);
+		boolean hasil = false;
+		
+		for( int i=1; i <= maxX;i++)
+		{
+			Block b2 = blocks[1][i];
+			hasil = hasil || guardianStrict.connected(b.arrayPos, b2.arrayPos);
+		}//end for
+		
+		return hasil;
 	}
 
 	// does the system percolate?x

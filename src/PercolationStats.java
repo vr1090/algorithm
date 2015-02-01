@@ -5,6 +5,7 @@ public class PercolationStats {
 	private int dimension = 0;
 	private int count_montecarlo = 0;
 	private List<Double> result;
+	private List<Percolation> pers;
 	private double mean;
 	private double stdev;
 
@@ -14,10 +15,23 @@ public class PercolationStats {
 		dimension = N;
 		count_montecarlo = T;
 		result = new ArrayList<Double>();
-
+		pers = new ArrayList<Percolation>();
+		
 		for (int i = 0; i < count_montecarlo; i++) {
 
 			Percolation quick = new Percolation(N);
+			pers.add(quick);
+		}// end for
+
+	}// end of method
+	
+	private void performCalculation()
+	{
+		if(result.size() != 0 )
+			return;
+		
+		for( Percolation quick : pers)
+		{
 			int attempt = 0;
 
 			while (!quick.percolates()) {
@@ -33,12 +47,13 @@ public class PercolationStats {
 
 			result.add((double) attempt / (dimension * dimension));
 
-		}// end for
-
-	}// end of method
+		}//end for
+	}//end of method
+	
 
 	public double mean() // sample mean of percolation threshold
 	{
+		performCalculation();
 		double tempValue = 0;
 
 		for (Double d : result) {
@@ -50,6 +65,7 @@ public class PercolationStats {
 
 	public double stddev() // sample standard deviation of percolation threshold
 	{
+		performCalculation();
 		double tempValue = 0;
 
 		for (Double d : result) {
