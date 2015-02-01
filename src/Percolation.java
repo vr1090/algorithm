@@ -12,8 +12,8 @@ public class Percolation {
 	private int rootAtas = 0;
 	private int rootBawah = -1;
 
-	private QuickUnionUF guardian = null;
-	private QuickUnionUF guardianStrict = null;
+	private WeightedQuickUnionUF guardian = null;
+	private QuickFindUF guardianStrict = null;
 
 	// create N-by-N grid, with all sites blocked
 	public Percolation(int n) {
@@ -22,8 +22,8 @@ public class Percolation {
 			throw new IllegalArgumentException();
 		
 		blocks = new Block[n + 1][n + 1];
-		guardian = new QuickUnionUF(n * n + 2);
-		guardianStrict = new QuickUnionUF(n*n+2);
+		guardian = new WeightedQuickUnionUF(n * n + 2);
+		guardianStrict = new QuickFindUF(n*n+2);
 		
 		int pos = 1;
 		// initialize dulu kali yah..
