@@ -12,6 +12,9 @@ public class PercolationStats {
 	public PercolationStats(int N, int T) // perform T independent experiments
 											// on an N-by-N grid
 	{
+		if( N < 1 || T < 1)
+			throw new IllegalArgumentException();
+		
 		dimension = N;
 		count_montecarlo = T;
 		result = new ArrayList<Double>();
@@ -35,13 +38,14 @@ public class PercolationStats {
 			int attempt = 0;
 
 			while (!quick.percolates()) {
-				int x = (int) ((Math.random() * dimension) + 1);
-				int y = (int) ((Math.random() * dimension) + 1);
+				int x = StdRandom.uniform(dimension) +1;
+				int y = StdRandom.uniform(dimension) + 1;
 				// System.out.println( "open ("+x + ","+y+")");
 				// quick.open(x,y);
 				// System.out.println(quick.percolates() );
 				if (quick.isOpen(x, y))
 					continue;
+				quick.open(x,y);
 				attempt++;
 			}// end of while
 
