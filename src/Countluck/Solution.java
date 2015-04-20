@@ -13,6 +13,8 @@ public class Solution {
 		Scanner scan = getScanner();
 		String firstLine = scan.nextLine();
 		int numTest = Integer.parseInt(firstLine);
+		int[] addX ={1,-1,0,0};
+		int[] addY ={0,0,1,-1};
 		
 		for( int test=1; test <= numTest; test++)
 		{
@@ -69,29 +71,16 @@ public class Solution {
 				{
 					ArrayList<Location> newLocation = new ArrayList<Location>();
 					
-					//atas
-					Location atas = new Location(current.x, current.y-1,numR,numC);
+					for( int add =0; add< addX.length; add++)
+					{
+						Location locationCandidate = new Location(current.x+addX[add], 
+								current.y+addY[add],numR,numC);
+						
+						if( locationCandidate.isValid(peta)  && !listVisisted.contains(locationCandidate))
+							newLocation.add(locationCandidate);
+							
+					}//end of for
 					
-					//bawah
-					Location bawah = new Location(current.x, current.y+1, numR, numC);
-					
-					//kanan
-					Location kanan = new Location(current.x +1, current.y, numR, numC);
-					
-					//kiri
-					Location kiri = new Location(current.x-1, current.y, numR, numC);
-					
-					if(atas.isValid(peta ) && !listVisisted.contains(atas)  )
-						newLocation.add(atas);
-					
-					if( bawah.isValid(peta) && !listVisisted.contains(bawah) )
-						newLocation.add(bawah);
-					
-					if( kanan.isValid(peta) && !listVisisted.contains(kanan))
-						newLocation.add(kanan);
-					
-					if(kiri.isValid(peta) && !listVisisted.contains(kiri))
-						newLocation.add(kiri);
 					
 					if( current == startPos)
 						logging( newLocation.toString());
