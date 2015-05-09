@@ -5,6 +5,7 @@ public class JourneyTotheMoon {
 	static boolean logging = true;
 	static boolean submit = false;
 	static String file="journey.txt"; 
+	static int[] persons;
 	
 	public static void main(String[] args) throws Exception
 	{
@@ -19,18 +20,14 @@ public class JourneyTotheMoon {
 		int I = Integer.parseInt(parseFirst[1]); // banyak pasangan yg di parse ulang..
 		
 		//bikin id orang dulu..
-		int[] persons = new int[N];
+		persons = new int[N];
 		
-		//bikin possible country
-		Stack<Integer> antrianCountry = new Stack<Integer>();
+		
 		
 		//init dulu juga
 		for(int i=0; i<N; i++)
-			persons[i] = -1;
+			persons[i] = i;
 		
-		//push dulu..
-		for(int i=0; i< N/2 +1;i++)
-			antrianCountry.push(i);
 		
 		//mulai parsing lagi
 		for( int couple=0; couple < I; couple++)
@@ -41,72 +38,106 @@ public class JourneyTotheMoon {
 			int astronotA = Integer.parseInt(dataPerson[0] );
 			int astronotB = Integer.parseInt(dataPerson[1] );
 			
-			logging("===========");
-			logging("parsingan.."+data);
+			union(astronotA,astronotB);
 			
-			
-			logging("init nilai "+ persons[astronotA]+":"+ persons[astronotB]);
-			if( !( haveId(astronotA,persons,antrianCountry) || haveId(astronotB,persons,antrianCountry)))  
-			{
-				//aman om..
-				//ambil id baru..
-				logging("bikin baru id nya om");
-				int newId = antrianCountry.pop();
-				persons[astronotA] = newId;
-				persons[astronotB] = newId;
-			}//end of if
-			else if( ( haveId(astronotA,persons,antrianCountry) && haveId(astronotB,persons,antrianCountry) ) )
-			{
-				logging("dua2 nya punya id yah..");
-				logging("perlu merging neh");
-				int idBaru = persons[astronotA] < persons[astronotB]? persons[astronotA]:persons[astronotB];
-				int idLama = persons[astronotA] > persons[astronotB]? persons[astronotA]:persons[astronotB];
-				
-				persons[astronotA]=idBaru;
-				persons[astronotB]= idBaru;
-				
-				for(int ganti=0; ganti < persons.length; ganti++)
-				{
-					if( persons[ganti]== idLama)
-						persons[ganti]= idBaru;
-				}//end for
-				
-			}//end else if
-			else
-			{
-				//salah satu punya id..
-				logging("ambil id salah satunya..");
-				int newId = haveId(astronotA,persons,antrianCountry)? persons[astronotA]:persons[astronotB];
-				persons[astronotA] = newId;
-				persons[astronotB] = newId;
-			}//end else
-			
-			logging(Arrays.toString( persons ) );
 		}//end for
+		
+		//tambah step.. buat pake uick union
+		for( int i=0; i< persons.length;i++)
+			persons[i] = root(i);
+		
 		logging( Arrays.toString(persons));
+		
+		
+		
 		long combination=0;
 		
-		//itung lah om..
-		for(int i=0; i< persons.length;i++)
+		Map<Integer,Integer> maps = new HashMap<Integer,Integer>();
+		
+		for( int i=0; i< persons.length;i++)
 		{
-			for(int j=i+1;j< persons.length;j++)
+			if( maps.get(persons[i]) == null)
 			{
-				if(persons[i]!=persons[j])
-				{
-					logging( persons[i] +"..."+persons[j]);
-					combination++;
-				}//end if
-			}//end for
+				maps.put(persons[i], 1);
+			}//end if
+			else
+			{
+				int value = maps.get(persons[i]);
+				maps.put(persons[i], value+1);
+			}//end else
+		}//end if
+		
+		Integer[] arrays = maps.values().toArray(new Integer[maps.size()]);
+		logging( Arrays.toString(arrays));
+		
+		for( int i=0; i< arrays.length;i++)
+		{
+			for(int j=i+1; j< arrays.length;j++)
+			{
+				combination = combination + arrays[i] * arrays[j];
+			}
 		}//end for
 		
 		System.out.println(combination);
 		
 	}//end of method
 	
-	static boolean haveId(int person, int[] mapping, Stack<Integer> listCountry)
+	static void union(int a,int b)
 	{
-		return mapping[person] != -1;
+		logging("==========");
+		logging("union.."+a +"...with.."+b);
+		logging(Arrays.toString(persons));
+		
+		//int idA = persons[a];
+		//int idB = persons[b];
+		
+		//for( int i=0; i< persons.length;i++)
+		//{
+		//	if( persons[i]== idB)
+		//		persons[i] = idA;
+		//}//end for
+		
+		/**
+		 * codingan quick union
+		 */
+		int parenta = root(a);
+		int parentb = root(b);
+		
+		if( parenta == parentb )
+			return;
+		else if( parenta < parentb)
+		{
+			persons[b] = parenta;
+		}//end else
+		else
+		{
+			persons[a] = parentb;
+		}//end else
+		
+		
+		
+		logging(Arrays.toString(persons));
+		logging("========");
 	}//end of method
+	
+	static int root(int a)
+	{
+		while(a != persons[a])
+		{
+			a = persons[a];
+		}///end of while
+		
+		return a;
+	}//end of method
+	
+	static boolean find(int a, int b)
+	{
+		return root(a) == root(b);
+		//return persons[a] == persons[b];
+	}//end of method
+	
+	
+
 	
 	static Scanner getScanner() throws Exception
 	{
